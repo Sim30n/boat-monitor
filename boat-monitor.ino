@@ -21,7 +21,7 @@ security
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2; // LCD screen variables
 const int current_sensor = A0;  //ACS712 Current sensor analog input pin
-const int buttonPin = 6;
+const int screenButtonPin = 6;
 const int alarmPin = 7;
 const int bilge_alarm = 8;
 const int one_wire_bus = 9;
@@ -33,17 +33,15 @@ const int relay1 = 21;
 const int relay2 = 22;
 #define DHTTYPE DHT21   // AM2301 
 
-
 boolean currentState = LOW;
 boolean lastState    = LOW;
 boolean stateChange  = false;
 
 int currentButton = 0;
-int lastButton    = 5;
+int lastButton    = 5;    
 
 float humidity;
 float inside_temperature;
-
 
 int bilge_water_level;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
@@ -58,7 +56,7 @@ void setup() {
     pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
     pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
     pinMode(current_sensor, INPUT);
-    pinMode(buttonPin, INPUT);
+    pinMode(screenButtonPin, INPUT);
     pinMode(alarmPin, OUTPUT);
     pinMode(bilge_alarm, INPUT);
     pinMode(relay1, OUTPUT);
@@ -69,12 +67,87 @@ void setup() {
 
 }
 
-void loop() {
 
-    currentState = debounceButton();
-    stateChange = checkForChange(currentState, lastState);
-    currentButton = getButtonNumber(lastButton, currentState, stateChange);
-    write_to_screen(currentButton);
+class ButtonClass {
+    public:
+    int buttonPin;
+
+    ButtonClass(int x) {
+      buttonPin = x;
+    }
+
+    // method debounceButton
+    boolean debounceButton()
+    {
+        boolean firstCheck   = LOW;
+        boolean secondCheck  = LOW;
+        boolean current = LOW;  
+        firstCheck  = digitalRead(buttonPin);
+        delay(50);
+        secondCheck = digitalRead(buttonPin);  
+        if (firstCheck == secondCheck){
+            current = firstCheck;
+        }
+        return current;
+    }
+
+    // method checkForChange
+    boolean checkForChange(boolean current, boolean last)
+    {
+        boolean change;  
+        if (current != last)
+        {
+            change = true;
+        }
+        else 
+        {
+        change = false;
+        }  
+        return change;
+    }
+
+    // function getButtonNumber
+    int getButtonNumber(int button, boolean state, boolean change)
+    {
+        if (change == true && state == LOW)
+        {
+            button++;
+            if (button > 5){
+            button = 0;
+            }
+            //Serial.println(button);
+        }
+        return button;
+    }
+
+    // method write to LCD screen
+    void write_to_screen(int button)
+    {   
+        // for (int i=0; i<5; i++) {
+        //    digitalWrite(ledArray[i], LOW);
+        // }
+        
+        typedef float (*FloatFunctionWithNoParameter) ();
+        FloatFunctionWithNoParameter functions[] = 
+        {
+            get_charging_current,
+            get_battery_voltage, 
+            get_water_temperature,
+            get_inside_temperature,
+            get_humidity_temperature,
+            get_bilge_water_level
+
+        };
+        float write_to_lcd = functions[button]();
+    }
+};
+
+void loop() {
+    ButtonClass displayButton(screenButtonPin);
+    currentState = displayButton.debounceButton();
+    stateChange = displayButton.checkForChange(currentState, lastState);
+    currentButton = displayButton.getButtonNumber(lastButton, currentState, stateChange);
+    displayButton.write_to_screen(currentButton);
     lastState  = currentState;
     lastButton = currentButton;
     check_bilge();
@@ -144,8 +217,6 @@ float get_battery_voltage()
     lcd.setCursor(0, 1);
     lcd.print(battery_voltage);
     return battery_voltage;
-
-    //12.44 1.37
 }
 
 float get_inside_temperature()
@@ -169,72 +240,6 @@ float get_humidity_temperature()
     return humidity;
 }
 
-
-
-// function debounceButton
-boolean debounceButton()
-{
-    boolean firstCheck   = LOW;
-    boolean secondCheck  = LOW;
-    boolean current = LOW;  
-    firstCheck  = digitalRead(buttonPin);
-    delay(50);
-    secondCheck = digitalRead(buttonPin);  
-    if (firstCheck == secondCheck){
-        current = firstCheck;
-    }
-    return current;
-}
-
-// function checkForChange
-boolean checkForChange(boolean current, boolean last)
-{
-    boolean change;  
-    if (current != last)
-    {
-        change = true;
-    }
-    else 
-    {
-    change = false;
-    }  
-    return change;
-}
-      
-// function getButtonNumber
-int getButtonNumber(int button, boolean state, boolean change)
-{
-    if (change == true && state == LOW)
-    {
-        button++;
-        if (button > 5){
-        button = 0;
-        }
-        //Serial.println(button);
-    }
-    return button;
-}
-
-void write_to_screen(int button)
-{   
-    // for (int i=0; i<5; i++) {
-    //    digitalWrite(ledArray[i], LOW);
-    // }
-    
-    typedef float (*FloatFunctionWithNoParameter) ();
-    FloatFunctionWithNoParameter functions[] = 
-    {
-        get_charging_current,
-        get_battery_voltage, 
-        get_water_temperature,
-        get_inside_temperature,
-        get_humidity_temperature,
-        get_bilge_water_level
-
-    };
-    float write_to_lcd = functions[button]();
-    
-}
 
 void check_bilge()
 {
