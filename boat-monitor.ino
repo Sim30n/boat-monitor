@@ -185,6 +185,7 @@ float get_water_temperature()
     lcd.print("Water temp:");
     lcd.setCursor(0, 1);
     lcd.print(water_temp);
+    delay(300);
     return water_temp;
 }
 
@@ -216,6 +217,7 @@ float get_battery_voltage()
     lcd.print("Bat. voltage:");
     lcd.setCursor(0, 1);
     lcd.print(battery_voltage);
+    delay(300);
     return battery_voltage;
 }
 
@@ -227,6 +229,7 @@ float get_inside_temperature()
     lcd.print("Inside temp:");
     lcd.setCursor(0, 1);
     lcd.print(inside_temp);
+    delay(300);
     return inside_temp;
 }
 
@@ -237,6 +240,7 @@ float get_humidity_temperature()
     lcd.print("Inside humidity:");
     lcd.setCursor(0, 1);
     lcd.print(humidity);
+    delay(300);
     return humidity;
 }
 
@@ -276,5 +280,6 @@ int get_bilge_water_level()
     lcd.print("Bilge level:");
     lcd.setCursor(0, 1);
     lcd.print(distance);
+    delay(300);
     return distance;
 }
