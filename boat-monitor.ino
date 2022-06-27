@@ -173,7 +173,8 @@ float get_charging_current()
     lcd.print("Charg. current:");
     lcd.setCursor(0, 1);
     lcd.print(charging_current);
-    delay(300);
+    // try without delay
+    //delay(300);
     return charging_current;
 }
 
