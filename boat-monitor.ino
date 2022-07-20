@@ -33,12 +33,14 @@ const int relay1 = 21;
 const int relay2 = 22;
 #define DHTTYPE DHT21   // AM2301 
 
+
 boolean currentState = LOW;
 boolean lastState    = LOW;
 boolean stateChange  = false;
 
 int currentButton = 0;
 int lastButton    = 5;    
+unsigned long interval;
 
 float humidity;
 float inside_temperature;
@@ -63,7 +65,8 @@ void setup() {
     pinMode(relay2, OUTPUT);
     digitalWrite(alarmPin, LOW);
     digitalWrite(relay1, LOW);
-    digitalWrite(relay2, LOW);
+    digitalWrite(relay2, LOW); 
+    interval = 10000;
 
 }
 
@@ -135,7 +138,7 @@ class ButtonClass {
             get_water_temperature,
             get_inside_temperature,
             get_humidity_temperature,
-            get_bilge_water_level
+            get_bilge_water_level,
 
         };
         float write_to_lcd = functions[button]();
@@ -143,6 +146,7 @@ class ButtonClass {
 };
 
 void loop() {
+    unsigned long startMillis = millis(); 
     ButtonClass displayButton(screenButtonPin);
     currentState = displayButton.debounceButton();
     stateChange = displayButton.checkForChange(currentState, lastState);
@@ -151,6 +155,36 @@ void loop() {
     lastState  = currentState;
     lastButton = currentButton;
     check_bilge();
+    if(startMillis >= interval)
+    {
+        send_mode();
+        interval = interval + 10000;
+
+    }
+}
+
+void send_mode()
+{
+    lcd.begin(16, 2);
+    lcd.print("Send mode");
+    float charging_current = get_charging_current();
+    float battery_voltage = get_battery_voltage();
+    float water_temperature = get_water_temperature();
+    float inside_temperature = get_inside_temperature();
+    float humidity_temperature = get_humidity_temperature();
+    int bilge_water_level = get_bilge_water_level();
+    Serial.print(charging_current);
+    Serial.print(";");
+    Serial.print(battery_voltage);
+    Serial.print(";");
+    Serial.print(water_temperature);
+    Serial.print(";");
+    Serial.print(inside_temperature);
+    Serial.print(";");
+    Serial.print(humidity_temperature);
+    Serial.print(";");
+    Serial.print(bilge_water_level);
+    Serial.println();
 }
 
 float get_charging_current()
