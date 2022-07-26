@@ -66,7 +66,8 @@ void setup() {
     digitalWrite(alarmPin, LOW);
     digitalWrite(relay1, LOW);
     digitalWrite(relay2, LOW); 
-    interval = 10000;
+    // interval = 20000;
+    
 
 }
 
@@ -142,11 +143,18 @@ class ButtonClass {
 
         };
         float write_to_lcd = functions[button]();
+        const char* write_description_to_lcd[6] = { "Charg. current:", "Bat. voltage:", "Water temp:", "Inside temp:", "Inside humidity:", "Bilge level:" };
+        lcd.begin(16, 2);
+        lcd.print(write_description_to_lcd[button]);
+        lcd.setCursor(0, 1);
+        lcd.print(write_to_lcd);
+        //delay(300);
+
     }
 };
 
 void loop() {
-    unsigned long startMillis = millis(); 
+    //unsigned long startMillis = millis(); 
     ButtonClass displayButton(screenButtonPin);
     currentState = displayButton.debounceButton();
     stateChange = displayButton.checkForChange(currentState, lastState);
@@ -155,18 +163,27 @@ void loop() {
     lastState  = currentState;
     lastButton = currentButton;
     check_bilge();
-    if(startMillis >= interval)
-    {
-        send_mode();
-        interval = interval + 10000;
-
+    //if(startMillis >= interval)
+   // {
+   //     send_mode();
+   //     interval = interval + 20000;
+   // }
+    if (Serial.available() > 0) {
+        String val = Serial.readStringUntil('\n');
+        if(val == "get_data")
+        {
+            send_mode();
+        }
+        else
+        {
+            // do nothing    
+        }
     }
+    
 }
 
 void send_mode()
 {
-    lcd.begin(16, 2);
-    lcd.print("Send mode");
     float charging_current = get_charging_current();
     float battery_voltage = get_battery_voltage();
     float water_temperature = get_water_temperature();
@@ -185,6 +202,11 @@ void send_mode()
     Serial.print(";");
     Serial.print(bilge_water_level);
     Serial.println();
+    lcd.begin(16, 2);
+    lcd.print("Sending data...");
+    lcd.setCursor(0, 1);
+    lcd.print("");
+    delay(3000);
 }
 
 float get_charging_current()
@@ -203,10 +225,7 @@ float get_charging_current()
     //}
     //Serial.println(charging_current);
     
-    lcd.begin(16, 2);
-    lcd.print("Charg. current:");
-    lcd.setCursor(0, 1);
-    lcd.print(charging_current);
+    
     // try without delay
     //delay(300);
     return charging_current;
@@ -216,11 +235,6 @@ float get_water_temperature()
 {
     sensors.requestTemperatures();
     float water_temp = sensors.getTempCByIndex(0);
-    lcd.begin(16, 2);
-    lcd.print("Water temp:");
-    lcd.setCursor(0, 1);
-    lcd.print(water_temp);
-    delay(300);
     return water_temp;
 }
 
@@ -248,34 +262,18 @@ float get_battery_voltage()
     step = 2.5/775;
     val = val*step;
     battery_voltage = pin_voltage * ratio;
-    lcd.begin(16, 2);
-    lcd.print("Bat. voltage:");
-    lcd.setCursor(0, 1);
-    lcd.print(battery_voltage);
-    delay(300);
     return battery_voltage;
 }
 
 float get_inside_temperature()
 {
-    humidity = dht.readHumidity();
     float inside_temp = dht.readTemperature();
-    lcd.begin(16, 2);
-    lcd.print("Inside temp:");
-    lcd.setCursor(0, 1);
-    lcd.print(inside_temp);
-    delay(300);
     return inside_temp;
 }
 
 float get_humidity_temperature()
 {
     humidity = dht.readHumidity();
-    lcd.begin(16, 2);
-    lcd.print("Inside humidity:");
-    lcd.setCursor(0, 1);
-    lcd.print(humidity);
-    delay(300);
     return humidity;
 }
 
@@ -311,10 +309,5 @@ int get_bilge_water_level()
     duration = pulseIn(echoPin, HIGH);
     // Calculating the distance, return cm
     distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back) 
-    lcd.begin(16, 2);
-    lcd.print("Bilge level:");
-    lcd.setCursor(0, 1);
-    lcd.print(distance);
-    delay(300);
     return distance;
 }
