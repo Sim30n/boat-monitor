@@ -134,7 +134,7 @@ class ButtonClass {
         typedef float (*FloatFunctionWithNoParameter) ();
         FloatFunctionWithNoParameter functions[] = 
         {
-            get_charging_current,
+            get_electric_load,
             get_battery_voltage, 
             get_water_temperature,
             get_inside_temperature,
@@ -143,7 +143,7 @@ class ButtonClass {
 
         };
         float write_to_lcd = functions[button]();
-        const char* write_description_to_lcd[6] = { "Charg. current:", "Bat. voltage:", "Water temp:", "Inside temp:", "Inside humidity:", "Bilge level:" };
+        const char* write_description_to_lcd[6] = { "Electric load:", "Bat. voltage:", "Water temp:", "Inside temp:", "Inside humidity:", "Bilge level:" };
         lcd.begin(16, 2);
         lcd.print(write_description_to_lcd[button]);
         lcd.setCursor(0, 1);
@@ -184,13 +184,13 @@ void loop() {
 
 void send_mode()
 {
-    float charging_current = get_charging_current();
+    float electric_load = get_electric_load();
     float battery_voltage = get_battery_voltage();
     float water_temperature = get_water_temperature();
     float inside_temperature = get_inside_temperature();
     float humidity_temperature = get_humidity_temperature();
     int bilge_water_level = get_bilge_water_level();
-    Serial.print(charging_current);
+    Serial.print(electric_load);
     Serial.print(";");
     Serial.print(battery_voltage);
     Serial.print(";");
@@ -209,13 +209,13 @@ void send_mode()
     delay(3000);
 }
 
-float get_charging_current()
+float get_electric_load()
 {
     // calculation for ACS712 current sensor
     // https://www.youtube.com/watch?v=d6MnA4aPDag&t=499s
     float current = analogRead(current_sensor);
     float voltage = current * 5 / 1023.0;
-    float charging_current = (voltage - 2.5) / 0.066;
+    float electric_load = (voltage - 2.5) / 0.066;
     
     // TODO: measure lowest charging current
     // if current below 0.16 show 0 amps
@@ -223,12 +223,12 @@ float get_charging_current()
     //{
     //    current = 0;
     //}
-    //Serial.println(charging_current);
+    //Serial.println(electric_load);
     
     
     // try without delay
     //delay(300);
-    return charging_current;
+    return electric_load;
 }
 
 float get_water_temperature()
