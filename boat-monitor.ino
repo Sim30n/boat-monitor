@@ -293,11 +293,11 @@ void check_bilge()
     }
 }
 
-int get_bilge_water_level()
+float get_bilge_water_level()
 {
     // defines variables
     long duration; // variable for the duration of sound wave travel
-    int distance; // variable for the distance measurement
+    float distance; // variable for the distance measurement
     // Clears the trigPin condition
     digitalWrite(trigPin, LOW);
     delayMicroseconds(2);
