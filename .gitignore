@@ -1,1 +1,5 @@
 /build
+/venv
+firebase.json
+.env
+app.log
