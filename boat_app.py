@@ -30,6 +30,7 @@ class ArduinoBoard:
         self.ser.write(str.encode("get_data"))
         time.sleep(2)
         result = self.ser.readline().decode("utf-8")
+        #import pdb; pdb.set_trace()
         strip_result = result.strip()
         split_result = strip_result.split(";")
         self.time_stamp = datetime.now()
