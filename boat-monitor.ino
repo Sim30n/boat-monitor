@@ -184,6 +184,10 @@ void loop() {
 
 void send_mode()
 {
+    lcd.begin(16, 2);
+    lcd.print("Sending data...");
+    lcd.setCursor(0, 1);
+    lcd.print("");
     float electric_load = get_electric_load();
     float battery_voltage = get_battery_voltage();
     float water_temperature = get_water_temperature();
@@ -202,10 +206,6 @@ void send_mode()
     Serial.print(";");
     Serial.print(bilge_water_level);
     Serial.println();
-    lcd.begin(16, 2);
-    lcd.print("Sending data...");
-    lcd.setCursor(0, 1);
-    lcd.print("");
     delay(3000);
 }
 
