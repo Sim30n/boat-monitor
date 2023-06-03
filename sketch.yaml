@@ -1,0 +1,11 @@
+profiles:
+  boat_micro:
+    fqbn: arduino:avr:micro
+    platforms:
+      - platform: arduino:avr (1.8.3)
+    libraries:
+      - LiquidCrystal (1.0.7)
+      - OneWire (2.3.6)
+      - DallasTemperature (3.9.0)
+      - DHT sensor library (1.4.2)
+      - Adafruit Unified Sensor (1.1.4)
