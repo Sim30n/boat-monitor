@@ -19,7 +19,7 @@ security
 #include <DHT.h>
 
 
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2; // LCD screen variables
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 0; // LCD screen variables
 const int current_sensor = A0;  //ACS712 Current sensor analog input pin
 const int screenButtonPin = 6;
 const int alarmPin = 7;
@@ -29,8 +29,8 @@ const int DHTPIN = 10; // Temperature and humidity sensor
 const int voltagePin = A1;
 const int echoPin = 20; // Echo pin of HC-SR04
 const int trigPin = 13; // Trigger pin of HC-SR04
-const int relay1 = 21;
-const int relay2 = 22;
+const int relay1 = 22;
+const int relay2 = 23;
 #define DHTTYPE DHT21   // AM2301 
 
 
@@ -41,6 +41,7 @@ boolean stateChange  = false;
 int currentButton = 0;
 int lastButton    = 5;    
 unsigned long interval;
+unsigned long startMillis;
 
 float humidity;
 float inside_temperature;
@@ -67,7 +68,8 @@ void setup() {
     digitalWrite(relay1, LOW);
     digitalWrite(relay2, LOW); 
     // interval = 20000;
-    
+    startMillis = millis(); 
+
 
 }
 
@@ -87,7 +89,7 @@ class ButtonClass {
         boolean secondCheck  = LOW;
         boolean current = LOW;  
         firstCheck  = digitalRead(buttonPin);
-        delay(50);
+        delay(80);
         secondCheck = digitalRead(buttonPin);  
         if (firstCheck == secondCheck){
             current = firstCheck;
@@ -137,24 +139,32 @@ class ButtonClass {
             get_electric_load,
             get_battery_voltage, 
             get_water_temperature,
-            get_inside_temperature,
             get_humidity_temperature,
-            get_bilge_water_level,
+            get_inside_temperature,
+            
+            //get_bilge_water_level,
 
         };
-        float write_to_lcd = functions[button]();
-        const char* write_description_to_lcd[6] = { "Electric load:", "Bat. voltage:", "Water temp:", "Inside temp:", "Inside humidity:", "Bilge level:" };
-        lcd.begin(16, 2);
-        lcd.print(write_description_to_lcd[button]);
-        lcd.setCursor(0, 1);
-        lcd.print(write_to_lcd);
-        //delay(300);
-
+        if(button == 5)
+        {
+            lcd.noDisplay();
+        }
+        else
+        {
+            float write_to_lcd = functions[button]();
+            const char* write_description_to_lcd[5] = { "Electric load:", "Bat. voltage:", "Water temp:", "Inside humidity:", "Inside temp:"};
+            lcd.begin(16, 2);
+            lcd.print(write_description_to_lcd[button]);
+            lcd.setCursor(0, 1);
+            lcd.print(write_to_lcd);
+            //delay(300);
+        }
     }
 };
 
 void loop() {
-    //unsigned long startMillis = millis(); 
+    unsigned long currentMillis = millis(); 
+    unsigned long stopMillis = startMillis + 60000; // 1 min 
     ButtonClass displayButton(screenButtonPin);
     currentState = displayButton.debounceButton();
     stateChange = displayButton.checkForChange(currentState, lastState);
@@ -179,7 +189,9 @@ void loop() {
             // do nothing    
         }
     }
-    
+    if (currentMillis >= stopMillis ) {
+        digitalWrite(relay2, HIGH); // power off
+    }
 }
 
 void send_mode()
