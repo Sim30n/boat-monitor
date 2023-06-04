@@ -12,6 +12,7 @@ load_dotenv()
 class ArduinoBoard:
     ser = serial.Serial(os.environ["SERIAL"], 9600)
     time.sleep(2)
+    print("Arduino initialized.")
 
     def __init__(self):
         self.time_stamp = None
@@ -52,6 +53,7 @@ class SeeeduinoBoard:
     def __init__(self) -> None:
         self.ser = serial.Serial(os.environ["SEEED_SERIAL"], 9600)
         time.sleep(2)
+        print("Seeeduino initialized.")
 
     def read_serial(self):
         voltage = float(self.ser.readline().decode("utf-8").strip())
@@ -70,13 +72,14 @@ if __name__ == "__main__":
     bilge_pump_timeout = 120 # measure this
     send_interval = datetime.datetime.now() + datetime.timedelta(0,0,0,0,10)
     duration_seconds = 0
+    print(f"Log loop started: {datetime.datetime.now()}")
     while True:
         try:
             time_now = datetime.datetime.now()
             bilge_pump_voltage = seeed_board.read_serial()
-            print(bilge_pump_voltage)
             if bilge_pump_voltage > 10:
                 bilge_pump_start_time = datetime.datetime.now()
+                print(f"Bilge pump started: {bilge_pump_start_time}")
                 while seeed_board.read_serial() > 10:
                     duration = datetime.datetime.now() - bilge_pump_start_time
                     duration_seconds = duration.total_seconds()
