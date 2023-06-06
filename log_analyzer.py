@@ -1,5 +1,5 @@
 import datetime
-
+import sys
 
 def read_log_file():
     file1 = open("app.log", "r")
@@ -25,4 +25,7 @@ for line in lines:
     log_items.append(to_dict)
 
 for log_item in log_items:
-    print(log_item["battery_voltage"])
+    try:
+        print(log_item[sys.argv[1]])
+    except KeyError:
+        print("Give valid log item.")
