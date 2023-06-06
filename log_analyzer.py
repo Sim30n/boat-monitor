@@ -23,7 +23,6 @@ log_items = []
 for line in lines:
     dictitem = line.split("{")
     dict_string = "{"+f"{dictitem[1]}"
-    print(dict_string)
     to_dict = eval(dict_string)
     log_items.append(to_dict)
 
