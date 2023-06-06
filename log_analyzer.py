@@ -11,8 +11,6 @@ def read_log_file():
         if not line:
             break
         lines.append(line.strip("\n"))
-        print(line)
-
     file1.close()
     return lines
 
