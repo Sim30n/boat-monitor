@@ -56,7 +56,7 @@ average_water_temperature = rows_between_dates["water_temperature"].mean()
 average_inside_temperature = rows_between_dates["inside_temperature"].mean()
 average_humidity_temperature = rows_between_dates["humidity_temperature"].mean()
 average_bilge_pump_run_time = rows_between_dates["bilge_pump_run_time"].mean()
-send_info = f"""Past 24h averages
+send_info = f"""*Past 24h averages*
 Battery voltage: {average_battery_voltage}
 Electric load: {average_electric_load}
 Water temperature: {average_water_temperature}
@@ -64,7 +64,7 @@ Inside temperature: {average_inside_temperature}
 Inside humidity: {average_humidity_temperature}
 Average bilge pump run time: {average_bilge_pump_run_time}"""
 print(send_info)
-telegram_send.send(messages=[send_info])
+telegram_send.send(messages=[send_info], parse_mode="markdown")
 
 
 # ---- print all -------------
