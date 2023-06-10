@@ -5,6 +5,7 @@ import datetime
 from dotenv import load_dotenv
 import logging
 import sys
+import telegram_send
 
 # load env variables
 load_dotenv()
@@ -84,7 +85,9 @@ if __name__ == "__main__":
                     duration = datetime.datetime.now() - bilge_pump_start_time
                     duration_seconds = duration.total_seconds()
                     if bilge_pump_timeout <= duration_seconds:
-                        print("BILGE TIMEOUT!!!")
+                        bilge_timeout = f"*BILGE PUMP OPERATED OVER {bilge_pump_timeout}s*"
+                        print(bilge_timeout)
+                        telegram_send.send(messages=[bilge_timeout], parse_mode="markdown")
                         break
                     print(duration_seconds)
                 boat_data = boat.get_data()
@@ -98,7 +101,9 @@ if __name__ == "__main__":
                     u'bilge_water_level': boat.bilge_water_level,
                     u'bilge_pump_run_time': duration_seconds
                 }
-                logging.info(f"{data}")
+                logging.info(f"{time_now}: {data}")
+                bilge_message = f"Bilge pump operated {bilge_pump_timeout}s"
+                telegram_send.send(messages=[bilge_message], parse_mode="markdown")
             if time_now > send_interval:
                 boat_data = boat.get_data()
                 data = {
