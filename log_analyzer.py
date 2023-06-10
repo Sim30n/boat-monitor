@@ -1,11 +1,17 @@
 import datetime
 import sys
+import os
 import pandas as pd
 import telegram_send
+from dotenv import load_dotenv
+
+# load env variables
+load_dotenv()
 
 
 def read_log_file():
-    file1 = open("app.log", "r")
+    log_file = os.environ["LOG_FILE"]
+    file1 = open(log_file, "r")
     count = 0
     lines = []
     while True:
