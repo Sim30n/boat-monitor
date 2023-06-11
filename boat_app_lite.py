@@ -102,7 +102,7 @@ if __name__ == "__main__":
                     u'bilge_pump_run_time': duration_seconds
                 }
                 logging.info(f"{time_now}: {data}")
-                bilge_message = f"Bilge pump operated {bilge_pump_timeout}s"
+                bilge_message = f"Bilge pump operated {duration_seconds}s"
                 telegram_send.send(messages=[bilge_message], parse_mode="markdown")
             if time_now > send_interval:
                 boat_data = boat.get_data()
