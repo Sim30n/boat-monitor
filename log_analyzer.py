@@ -28,6 +28,8 @@ def read_log_file():
 lines = read_log_file()
 log_items = []
 for line in lines:
+    if line.startswith("telegram.bot"):
+        continue
     dictitem = line.split("{")
     dict_string = "{"+f"{dictitem[1]}"
     to_dict = eval(dict_string)
