@@ -19,7 +19,7 @@ httplib2==0.20.4
 idna==3.3
 msgpack==1.0.4
 proto-plus==1.20.6
-protobuf==4.21.4
+protobuf
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pyparsing==3.0.9
