@@ -19,17 +19,22 @@ on:
         type: string
       flash-arduino-micro:
         type: boolean
-        description: Falsh the Boat-monitor application to Arduino Micro 
+        description: Falsh the Boat-monitor application to Arduino Micro
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
+  # This workflow contains a single job called "boat"
+  boat:
     # The type of runner that the job will run on
     runs-on: self-hosted
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ inputs.name }}"
+    - name: Start boat_app_lite
+      #run: echo "Hello ${{ inputs.name }}"
+      run: pwd
+      #run: |
+      #   chmod +x ./.github/scripts/start_boat_app.sh
+      #   ./.github/scripts/start_boat_app.sh
+      #shell: bash
