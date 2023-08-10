@@ -31,10 +31,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Start boat_app_lite
       #run: echo "Hello ${{ inputs.name }}"
-      run: ls
-      #run: |
-      #   chmod +x ./.github/scripts/start_boat_app.sh
-      #   ./.github/scripts/start_boat_app.sh
-      #shell: bash
+      #run: ls
+      run: |
+         chmod +x ./.github/scripts/start_boat_app.sh
+         ./.github/scripts/start_boat_app.sh
+      shell: bash
