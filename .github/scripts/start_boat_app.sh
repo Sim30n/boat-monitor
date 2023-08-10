@@ -13,7 +13,7 @@ fi
 tmux new-session -d -s $SESSION_NAME
 
 # Send a command to the tmux session to start the Python program
-tmux send-keys -t $SESSION_NAME "./home/pi/projects/boat/boat-monitor/venv/bin/python3 your_python_script.py" C-m
+tmux send-keys -t $SESSION_NAME "./home/pi/projects/boat/boat-monitor/venv/bin/python3 boat_app_lite.py" C-m
 
 # Detach the tmux session
 tmux detach-session -t $SESSION_NAME
