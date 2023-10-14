@@ -1,3 +1,10 @@
+# instll core for seeed_XIAO_m0
+arduino-cli core install Seeeduino:samd --additional-urls https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json
+
+# also required for raspberry pi 3
+sudo apt install libfl2
+
+# list all boards attached
 arduino-cli board list
 
 # compile
