@@ -3,3 +3,5 @@
 firebase.json
 .env
 app.log
+/arduino_sketch/build
+/seeeduino_sketch/build

@@ -1,0 +1,6 @@
+profiles:
+  seeeduino_sketch:
+    fqbn: Seeeduino:samd:seeed_XIAO_m0
+    platforms:
+      - platform: Seeeduino:samd (1.8.2)
+        platform_index_url: https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json

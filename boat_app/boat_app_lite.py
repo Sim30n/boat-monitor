@@ -74,7 +74,7 @@ class SeeeduinoBoard:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename="app.log", filemode="a", format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+    logging.basicConfig(filename="../logs/app.log", filemode="a", format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
     boat = ArduinoBoard()
     seeed_board = SeeeduinoBoard()
     bilge_pump_timeout = 120  # measure this

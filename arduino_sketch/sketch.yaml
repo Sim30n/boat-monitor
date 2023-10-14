@@ -1,5 +1,5 @@
 profiles:
-  boat_micro:
+  arduino_sketch:
     fqbn: arduino:avr:micro
     platforms:
       - platform: arduino:avr (1.8.3)
