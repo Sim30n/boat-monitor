@@ -6,17 +6,17 @@ from dotenv import load_dotenv
 import logging
 import sys
 import telegram_send
+import argparse
 
 # load env variables
 load_dotenv()
 
 
 class ArduinoBoard:
-    ser = serial.Serial(os.environ["SERIAL"], 9600)
-    time.sleep(2)
-    print("Arduino initialized.")
-
     def __init__(self):
+        self.ser = serial.Serial(os.environ["SERIAL"], 9600)
+        time.sleep(2)
+        print("Arduino initialized.")
 
         self.data = {
             "time_stamp":           None,
@@ -73,7 +73,7 @@ class SeeeduinoBoard:
         self.ser.close()
 
 
-if __name__ == "__main__":
+def main_app():
     logging.basicConfig(filename=f"{os.environ['LOG_FILE']}", filemode="a", format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
     boat = ArduinoBoard()
     seeed_board = SeeeduinoBoard()
@@ -117,3 +117,19 @@ if __name__ == "__main__":
             boat.close_serial()
             print("Closing serial")
             sys.exit(1)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-r", "--read_values", help="Read values from Arduino board.",
+                    action="store_true")
+    parser.add_argument("-m", "--main_app", help="Start main application",
+                    action="store_true")
+    args = parser.parse_args()
+
+    if args.read_values:
+        boat = ArduinoBoard()
+        boat.get_data()
+        boat.close_serial()
+
+    if args.main_app:
+        main_app()
