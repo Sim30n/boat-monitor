@@ -39,6 +39,7 @@ jobs:
       #run: echo "Hello ${{ inputs.name }}"
       #run: ls
       run: |
-         chmod +x ./.github/scripts/start_boat_app.sh
-         ./.github/scripts/start_boat_app.sh
+         pwd
+         #chmod +x ./.github/scripts/start_boat_app.sh
+         #./.github/scripts/start_boat_app.sh
       shell: bash

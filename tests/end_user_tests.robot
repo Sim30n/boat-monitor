@@ -1,0 +1,58 @@
+*** Settings ***
+Library   Process
+Library   String
+
+*** Variables ***
+${python_bin} =    /home/pi/projects/boat/boat-monitor/venv/bin/python
+${boat_app} =    /home/pi/projects/boat/boat-monitor/boat_app/boat_app_lite.py
+
+*** Test Cases ***
+Get Battery Voltage
+    ${result} =    Run Process    ${python_bin}    ${boat_app}
+    ...    --get_value    battery_voltage
+    ${board_init} =    Get Line    ${result.stdout}    0
+    ${battery_voltage} =     Get Line    ${result.stdout}    -1
+    Should Be Equal    ${board_init}    Arduino initialized.
+    Should Be True	${battery_voltage} >= 0
+
+Get Electric Load
+    ${result} =    Run Process    ${python_bin}    ${boat_app}
+    ...    --get_value    get_electric_load
+    ${board_init} =     Get Line    ${result.stdout}    0
+    ${electric_load} =  Get Line    ${result.stdout}    -1
+    Should Be Equal    ${board_init}    Arduino initialized.
+    Should Be True	${electric_load} > -5
+    Should Be True	${electric_load} < 5
+
+Get Water Temperature
+    ${result} =    Run Process    ${python_bin}    ${boat_app}
+    ...    --get_value    get_water_temperature
+    ${board_init} =     Get Line    ${result.stdout}    0
+    ${water_temperature_value} =  Get Line    ${result.stdout}    -1
+    Should Be Equal    ${board_init}    Arduino initialized.
+    Should Be True	${water_temperature_value} > -50
+    Should Be True	${water_temperature_value} < 50
+
+Get Inside Humidity
+    ${result} =    Run Process    ${python_bin}    ${boat_app}
+    ...    --get_value    get_humidity_temperature
+    ${board_init} =     Get Line    ${result.stdout}    0
+    ${humidity_value} =  Get Line    ${result.stdout}    -1
+    Should Be Equal    ${board_init}    Arduino initialized.
+    Should Be True	${humidity_value} > 30
+
+Get Inside Temperature
+    ${result} =    Run Process    ${python_bin}    ${boat_app}
+    ...    --get_value    get_inside_temperature
+    ${board_init} =     Get Line    ${result.stdout}    0
+    ${water_temperature_value} =  Get Line    ${result.stdout}    -1
+    Should Be Equal    ${board_init}    Arduino initialized.
+    Should Be True    ${water_temperature_value} > -50
+    Should Be True    ${water_temperature_value} < 50
+
+Start Main App
+    ${result} =    Start Process    ${python_bin}    ${boat_app}
+    ...    --main_app
+    Sleep    5
+    Process Should Be Running    ${result}
+    Terminate All Processes
