@@ -3,7 +3,7 @@ Library   Process
 Library   String
 
 *** Variables ***
-${python_bin} =    ${boat_app_path}/venv/bin/python
+${python_bin} =    ${venv_bin}/python
 ${boat_app} =    ${boat_app_path}/boat_app/boat_app_lite.py
 
 
