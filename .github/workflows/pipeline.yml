@@ -39,6 +39,8 @@ jobs:
       run : > 
         export SERIAL=$SERIAL
 
+        echo $SERIAL
+
         export SEEED_SERIAL=$SEEED_SERIAL
 
         export LOG_FILE=$LOG_FILE
