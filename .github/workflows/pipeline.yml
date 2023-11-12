@@ -36,7 +36,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Run end user tests
-      run : ./boat-monitor/venv/bin/robot --outputdir boat-monitor/tests/test_output boat-monitor/tests/end_user_tests.robot
+      run : ./home/pi/projects/boat/boat-monitor/venv/bin/robot --outputdir boat-monitor/tests/test_output boat-monitor/tests/end_user_tests.robot
       shell: bash
 
     - name: Start boat_app_lite
