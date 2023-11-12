@@ -15,5 +15,4 @@ fi
 
 #tmux kill-session -t boat_app
 tmux new-session -d -s boat_app "${python_path} ${main_app}"
-tmux set-option -t boat_app:0 remain-on-exit
 echo "new tmux session '$session_name' started."

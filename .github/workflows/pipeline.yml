@@ -62,10 +62,10 @@ jobs:
         tests/end_user_tests.robot
       shell: bash
 
-    - name: Start boat_app_lite
-      #run: echo "Hello ${{ inputs.name }}"
-      #run: ls
-      run: |
-         chmod +x ./scripts/run_main_app.sh
-         ./scripts/run_main_app.sh
-      shell: bash
+    #- name: Start boat_app_lite
+    #  #run: echo "Hello ${{ inputs.name }}"
+    #  #run: ls
+    #  run: |
+    #     chmod +x ./scripts/run_main_app.sh
+    #     ./scripts/run_main_app.sh
+    #  shell: bash
