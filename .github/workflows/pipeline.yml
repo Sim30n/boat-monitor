@@ -35,6 +35,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: Run end user tests
+      run : ./venv/bin/robot --outputdir tests/test_output tests/end_user_tests.robot
+      shell: bash
+
     - name: Start boat_app_lite
       #run: echo "Hello ${{ inputs.name }}"
       #run: ls
