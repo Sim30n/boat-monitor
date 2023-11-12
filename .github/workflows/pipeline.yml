@@ -37,13 +37,11 @@ jobs:
 
     - name: Run end user tests
       run : > 
-        export SERIAL=$SERIAL
+        export SERIAL=${{ secrets.SERIAL }}
 
-        echo $SERIAL
+        export SEEED_SERIAL=${{ secrets.SEEED_SERIAL }}
 
-        export SEEED_SERIAL=$SEEED_SERIAL
-
-        export LOG_FILE=$LOG_FILE
+        export LOG_FILE=${{ secrets.LOG_FILE }}
 
         /home/pi/projects/boat/boat-monitor/venv/bin/robot
         --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
