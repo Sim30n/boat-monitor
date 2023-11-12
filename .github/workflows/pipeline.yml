@@ -43,6 +43,8 @@ jobs:
 
         export LOG_FILE=${{ secrets.LOG_FILE }}
 
+        export STOP_SIGNAL="0"
+
         /home/pi/projects/boat/boat-monitor/venv/bin/robot
         --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
         --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
