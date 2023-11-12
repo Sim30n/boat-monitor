@@ -3,9 +3,11 @@ Library   Process
 Library   String
 
 *** Variables ***
-${python_bin} =    /home/pi/projects/boat/boat-monitor/venv/bin/python
-${boat_app} =    /home/pi/projects/boat/boat-monitor/boat_app/boat_app_lite.py
+${python_bin} =    ${boat_app_path}/venv/bin/python
+${boat_app} =    ${boat_app_path}/boat_app/boat_app_lite.py
 
+
+# Run with command: robot --variable boat_app_path:/home/pi/projects/boat/boat-monitor --outputdir test_output end_user_tests.robot
 *** Test Cases ***
 Get Battery Voltage
     ${result} =    Run Process    ${python_bin}    ${boat_app}

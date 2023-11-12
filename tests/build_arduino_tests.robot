@@ -3,10 +3,11 @@ Library   Process
 Library   String
 
 *** Variables ***
-${arduino_sketch_path} =    /home/pi/projects/boat/boat-monitor/arduino_sketch
-${flash_path} =    /home/pi/projects/boat/boat-monitor
+${arduino_sketch_path} =    ${boat_app_path}/arduino_sketch
+${flash_path} =    ${boat_app_path}
 ${arduino_usb} =    /dev/ttyACM0
 
+# Run with command: robot --variable boat_app_path:/home/pi/projects/boat/boat-monitor --outputdir test_output build_arduino_tests.robot
 *** Test Cases ***
 Build Arduino Sketch
     ${result} =    Run Process    arduino-cli     compile    --profile
