@@ -37,6 +37,9 @@ jobs:
 
     - name: Run end user tests
       run : > 
+        export SERIAL=$SERIAL
+        export SEEED_SERIAL=$SEEED_SERIAL
+        export LOG_FILE=$LOG_FILE
         /home/pi/projects/boat/boat-monitor/venv/bin/robot
         --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
         --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
