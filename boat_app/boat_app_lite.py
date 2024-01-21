@@ -89,6 +89,7 @@ def main_app():
     send_interval = datetime.datetime.now() + datetime.timedelta(0,0,0,0,10)
     duration_seconds = 0
     print(f"Log loop started: {datetime.datetime.now()}")
+    telegram_send.send(messages=["Boat monintor app started"], parse_mode="markdown")
     while True:
         try:
             time_now = datetime.datetime.now()
@@ -142,7 +143,7 @@ if __name__ == "__main__":
 
     if args.main_app:
         main_app()
-    
+
     if args.get_value:
         boat = ArduinoBoard()
         boat.get_data(args.get_value)
