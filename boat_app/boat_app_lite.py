@@ -6,17 +6,17 @@ from dotenv import load_dotenv
 import logging
 import sys
 import telegram_send
+import argparse
 
 # load env variables
 load_dotenv()
 
 
 class ArduinoBoard:
-    ser = serial.Serial(os.environ["SERIAL"], 9600)
-    time.sleep(2)
-    print("Arduino initialized.")
-
     def __init__(self):
+        self.ser = serial.Serial(os.environ["SERIAL"], 9600)
+        time.sleep(2)
+        print("Arduino initialized.")
 
         self.data = {
             "time_stamp":           None,
@@ -29,25 +29,33 @@ class ArduinoBoard:
             "bilge_pump_run_time":  None,
             }
 
-    def get_data(self):
+    def get_data(self, node: str = "all"):
         """"
         This method will ask the latest sensor values from arduino board.
         """
-        self.ser.write(str.encode("get_data"))
-        time.sleep(2)
-        result = self.ser.readline().decode("utf-8")
-        #import pdb; pdb.set_trace()
-        strip_result = result.strip()
-        split_result = strip_result.split(";")
-        self.data["time_stamp"] = datetime.datetime.now()
-        self.data["electric_load"] = split_result[0]
-        self.data["battery_voltage"] = split_result[1]
-        self.data["water_temperature"] = split_result[2]
-        self.data["inside_temperature"] = split_result[3]
-        self.data["humidity_temperature"] = split_result[4]
-        self.data["bilge_water_level"] = split_result[5]
-        print(split_result)
-        return split_result
+        if node == "all":
+            self.ser.write(str.encode("get_data"))
+            time.sleep(2)
+            result = self.ser.readline().decode("utf-8")
+            #import pdb; pdb.set_trace()
+            strip_result = result.strip()
+            split_result = strip_result.split(";")
+            self.data["time_stamp"] = datetime.datetime.now()
+            self.data["electric_load"] = split_result[0]
+            self.data["battery_voltage"] = split_result[1]
+            self.data["water_temperature"] = split_result[2]
+            self.data["inside_temperature"] = split_result[3]
+            self.data["humidity_temperature"] = split_result[4]
+            self.data["bilge_water_level"] = split_result[5]
+            print(split_result)
+            return split_result
+        else:
+            self.ser.write(str.encode(node))
+            time.sleep(0.5)
+            result = self.ser.readline().decode("utf-8")
+            strip_result = result.strip()
+            print(strip_result)
+            return strip_result
 
     def close_serial(self):
         """
@@ -73,7 +81,7 @@ class SeeeduinoBoard:
         self.ser.close()
 
 
-if __name__ == "__main__":
+def main_app():
     logging.basicConfig(filename=f"{os.environ['LOG_FILE']}", filemode="a", format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
     boat = ArduinoBoard()
     seeed_board = SeeeduinoBoard()
@@ -117,3 +125,26 @@ if __name__ == "__main__":
             boat.close_serial()
             print("Closing serial")
             sys.exit(1)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-r", "--read_values", help="Read values from Arduino board.",
+                    action="store_true")
+    parser.add_argument("-m", "--main_app", help="Start main application.",
+                    action="store_true")
+    parser.add_argument("-g", "--get_value", help="Read individual node value.", type=str)
+    args = parser.parse_args()
+
+    if args.read_values:
+        boat = ArduinoBoard()
+        boat.get_data()
+        boat.close_serial()
+
+    if args.main_app:
+        main_app()
+    
+    if args.get_value:
+        boat = ArduinoBoard()
+        boat.get_data(args.get_value)
+        boat.close_serial()
+

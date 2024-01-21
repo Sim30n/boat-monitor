@@ -5,3 +5,4 @@ firebase.json
 app.log
 /arduino_sketch/build
 /seeeduino_sketch/build
+/tests/test_output

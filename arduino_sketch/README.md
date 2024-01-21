@@ -8,3 +8,5 @@ arduino-cli compile --fqbn arduino:avr:micro--dump-profile
 
 # compile with profile file
 arduino-cli compile --profile arduino_sketch
+
+Serial interface:

@@ -5,7 +5,7 @@ battery voltage *
 outside temp *
 humidity *
 inside temp *
-bilge water level* 
+bilge water level*
 battery load
 
 --- Alarms ---
@@ -14,7 +14,7 @@ security
 */
 
 #include <LiquidCrystal.h>
-#include <OneWire.h> 
+#include <OneWire.h>
 #include <DallasTemperature.h>
 #include <DHT.h>
 
@@ -31,7 +31,7 @@ const int echoPin = 20; // Echo pin of HC-SR04
 const int trigPin = 13; // Trigger pin of HC-SR04
 const int relay1 = 22;
 const int relay2 = 23;
-#define DHTTYPE DHT21   // AM2301 
+#define DHTTYPE DHT21   // AM2301
 
 
 boolean currentState = LOW;
@@ -39,7 +39,7 @@ boolean lastState    = LOW;
 boolean stateChange  = false;
 
 int currentButton = 0;
-int lastButton    = 5;    
+int lastButton    = 5;
 unsigned long interval;
 unsigned long startMillis;
 
@@ -48,7 +48,7 @@ float inside_temperature;
 
 int bilge_water_level;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-OneWire oneWire(one_wire_bus); 
+OneWire oneWire(one_wire_bus);
 DallasTemperature sensors(&oneWire);
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -66,9 +66,9 @@ void setup() {
     pinMode(relay2, OUTPUT);
     digitalWrite(alarmPin, LOW);
     digitalWrite(relay1, LOW);
-    digitalWrite(relay2, LOW); 
+    digitalWrite(relay2, LOW);
     // interval = 20000;
-    startMillis = millis(); 
+    startMillis = millis();
 
 
 }
@@ -87,10 +87,10 @@ class ButtonClass {
     {
         boolean firstCheck   = LOW;
         boolean secondCheck  = LOW;
-        boolean current = LOW;  
+        boolean current = LOW;
         firstCheck  = digitalRead(buttonPin);
         delay(80);
-        secondCheck = digitalRead(buttonPin);  
+        secondCheck = digitalRead(buttonPin);
         if (firstCheck == secondCheck){
             current = firstCheck;
         }
@@ -100,15 +100,15 @@ class ButtonClass {
     // method checkForChange
     boolean checkForChange(boolean current, boolean last)
     {
-        boolean change;  
+        boolean change;
         if (current != last)
         {
             change = true;
         }
-        else 
+        else
         {
         change = false;
-        }  
+        }
         return change;
     }
 
@@ -128,20 +128,20 @@ class ButtonClass {
 
     // method write to LCD screen
     void write_to_screen(int button)
-    {   
+    {
         // for (int i=0; i<5; i++) {
         //    digitalWrite(ledArray[i], LOW);
         // }
-        
+
         typedef float (*FloatFunctionWithNoParameter) ();
-        FloatFunctionWithNoParameter functions[] = 
+        FloatFunctionWithNoParameter functions[] =
         {
             get_electric_load,
-            get_battery_voltage, 
+            get_battery_voltage,
             get_water_temperature,
             get_humidity_temperature,
             get_inside_temperature,
-            
+
             //get_bilge_water_level,
 
         };
@@ -163,8 +163,8 @@ class ButtonClass {
 };
 
 void loop() {
-    unsigned long currentMillis = millis(); 
-    unsigned long stopMillis = startMillis + 60000; // 1 min 
+    unsigned long currentMillis = millis();
+    unsigned long stopMillis = startMillis + 60000; // 1 min
     ButtonClass displayButton(screenButtonPin);
     currentState = displayButton.debounceButton();
     stateChange = displayButton.checkForChange(currentState, lastState);
@@ -184,9 +184,44 @@ void loop() {
         {
             send_mode();
         }
+        else if(val == "battery_voltage")
+        {
+            float battery_voltage = get_battery_voltage();
+            Serial.print(battery_voltage);
+            Serial.println();
+            delay(300);
+        }
+        else if(val == "get_electric_load")
+        {
+            float electric_load = get_electric_load();
+            Serial.print(electric_load);
+            Serial.println();
+            delay(300);
+        }
+        else if(val == "get_water_temperature")
+        {
+            float water_temperature = get_water_temperature();
+            Serial.print(water_temperature);
+            Serial.println();
+            delay(300);
+        }
+        else if(val == "get_inside_temperature")
+        {
+            float inside_temperature = get_inside_temperature();
+            Serial.print(inside_temperature);
+            Serial.println();
+            delay(300);
+        }
+        else if(val == "get_humidity_temperature")
+        {
+            float humidity_temperature = get_humidity_temperature();
+            Serial.print(humidity_temperature);
+            Serial.println();
+            delay(300);
+        }
         else
         {
-            // do nothing    
+            // do nothing
         }
     }
     if (currentMillis >= stopMillis ) {
@@ -228,7 +263,7 @@ float get_electric_load()
     float current = analogRead(current_sensor);
     float voltage = current * 5 / 1023.0;
     float electric_load = (voltage - 2.5) / 0.066;
-    
+
     // TODO: measure lowest charging current
     // if current below 0.16 show 0 amps
     //if (current < 0.16)
@@ -236,8 +271,8 @@ float get_electric_load()
     //    current = 0;
     //}
     //Serial.println(electric_load);
-    
-    
+
+
     // try without delay
     //delay(300);
     return electric_load;
@@ -265,10 +300,10 @@ float get_battery_voltage()
     Vout = 2.5V
     https://ohmslawcalculator.com/voltage-divider-calculator
     */
-    float val; 
+    float val;
     float step;
     float battery_voltage;
-    float ratio = 6.0; // 15V/2.5V 
+    float ratio = 6.0; // 15V/2.5V
     val = analogRead(voltagePin);  // read the voltage input pin
     float pin_voltage = val * 0.00488;
     step = 2.5/775;
@@ -293,9 +328,9 @@ float get_humidity_temperature()
 void check_bilge()
 {
     int water_level = digitalRead(bilge_alarm);
-    if (water_level == 1) 
+    if (water_level == 1)
     {
-        digitalWrite(alarmPin, HIGH); 
+        digitalWrite(alarmPin, HIGH);
         digitalWrite(relay1, HIGH);
     }
     else
@@ -320,6 +355,6 @@ float get_bilge_water_level()
     // Reads the echoPin, returns the sound wave travel time in microseconds
     duration = pulseIn(echoPin, HIGH);
     // Calculating the distance, return cm
-    distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back) 
+    distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
     return distance;
 }

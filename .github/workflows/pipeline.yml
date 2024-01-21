@@ -34,11 +34,38 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Start boat_app_lite
-      #run: echo "Hello ${{ inputs.name }}"
-      #run: ls
-      run: |
-         chmod +x ./.github/scripts/start_boat_app.sh
-         ./.github/scripts/start_boat_app.sh
+    
+    - name: Build and flash Boat-monitor application to Arduino Micro
+      if: ${{ inputs.flash-arduino-micro }} 
+      run : > 
+        /home/pi/projects/boat/boat-monitor/venv/bin/robot
+        --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
+        --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
+        --outputdir tests/test_output
+        tests/build_arduino_tests.robot
       shell: bash
+
+    - name: Run end user tests
+      run : > 
+        export SERIAL=${{ secrets.SERIAL }}
+
+        export SEEED_SERIAL=${{ secrets.SEEED_SERIAL }}
+
+        export LOG_FILE=${{ secrets.LOG_FILE }}
+
+        export STOP_SIGNAL="0"
+
+        /home/pi/projects/boat/boat-monitor/venv/bin/robot
+        --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
+        --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
+        --outputdir tests/test_output
+        tests/end_user_tests.robot
+      shell: bash
+
+    #- name: Start boat_app_lite
+    #  #run: echo "Hello ${{ inputs.name }}"
+    #  #run: ls
+    #  run: |
+    #     chmod +x ./scripts/run_main_app.sh
+    #     ./scripts/run_main_app.sh
+    #  shell: bash
