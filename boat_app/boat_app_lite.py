@@ -7,14 +7,15 @@ import logging
 import sys
 import telegram_send
 import argparse
+import subprocess
 
 # load env variables
 load_dotenv()
 
 
 class ArduinoBoard:
-    def __init__(self):
-        self.ser = serial.Serial(os.environ["SERIAL"], 9600)
+    def __init__(self, arduino_micro):
+        self.ser = serial.Serial(arduino_micro, 9600)
         time.sleep(2)
         print("Arduino initialized.")
 
@@ -65,8 +66,8 @@ class ArduinoBoard:
 
 
 class SeeeduinoBoard:
-    def __init__(self) -> None:
-        self.ser = serial.Serial(os.environ["SEEED_SERIAL"], 9600)
+    def __init__(self, seeeduino_xiao) -> None:
+        self.ser = serial.Serial(seeeduino_xiao, 9600)
         time.sleep(2)
         print("Seeeduino initialized.")
 
@@ -80,11 +81,20 @@ class SeeeduinoBoard:
         """
         self.ser.close()
 
+def find_usb_ports():
+    run_command = subprocess.Popen("arduino-cli board list", shell=True, stdout=subprocess.PIPE).stdout.read()
+    for line in run_command.decode().splitlines():
+        if "Arduino Micro" in line:
+            arduino_micro = line[:12]
+        elif "Seeeduino XIAO" in line:
+            seeeduino_xiao = line[:12]
+    return arduino_micro, seeeduino_xiao
 
 def main_app():
     logging.basicConfig(filename=f"{os.environ['LOG_FILE']}", filemode="a", format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
-    boat = ArduinoBoard()
-    seeed_board = SeeeduinoBoard()
+    usb_ports = find_usb_ports()
+    boat = ArduinoBoard(usb_ports[0])
+    seeed_board = SeeeduinoBoard(usb_ports[1])
     bilge_pump_timeout = 120  # measure this
     send_interval = datetime.datetime.now() + datetime.timedelta(0,0,0,0,10)
     duration_seconds = 0

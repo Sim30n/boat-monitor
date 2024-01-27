@@ -1,0 +1,1 @@
+arduino_usb="/dev/ttyACM0"
