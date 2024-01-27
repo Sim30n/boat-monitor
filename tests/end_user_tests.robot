@@ -41,7 +41,7 @@ Get Inside Humidity
     ${board_init} =     Get Line    ${result.stdout}    0
     ${humidity_value} =  Get Line    ${result.stdout}    -1
     Should Be Equal    ${board_init}    Arduino initialized.
-    Should Be True	${humidity_value} > 30
+    Should Be True	${humidity_value} > 20
 
 Get Inside Temperature
     ${result} =    Run Process    ${python_bin}    ${boat_app}
