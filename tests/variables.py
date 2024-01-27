@@ -1,1 +1,1 @@
-arduino_usb="/dev/ttyACM0"
+arduino_usb="/dev/ttyACM2"
