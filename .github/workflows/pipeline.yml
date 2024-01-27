@@ -62,7 +62,14 @@ jobs:
         tests/end_user_tests.robot
       shell: bash
     - name: Restart Boat app service
-      run : sudo systemctl restart boat_app_service
+      run : > 
+        sudo cp /home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor/scripts/boat_app_service.service /etc/systemd/system/
+
+        sudo systemctl daemon-reload
+
+        sudo systemctl enable boat_app_service
+
+        sudo systemctl start boat_app_service
       shell: bash
 
     #- name: Start boat_app_lite
