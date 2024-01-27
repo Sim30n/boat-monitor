@@ -61,6 +61,9 @@ jobs:
         --outputdir tests/test_output
         tests/end_user_tests.robot
       shell: bash
+    - name: Restart Boat app service
+      run : sudo systemctl restart boat_app_service
+      shell: bash
 
     #- name: Start boat_app_lite
     #  #run: echo "Hello ${{ inputs.name }}"

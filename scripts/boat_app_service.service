@@ -1,0 +1,17 @@
+#sudo cp /home/pi/projects/boat/boat-monitor/scripts/boat_app_service.service /etc/systemd/system/
+#sudo systemctl daemon-reload
+#sudo systemctl enable boat_app_service
+#sudo systemctl start boat_app_service
+#sudo systemctl restart boat_app_service
+
+[Unit]
+Description=Boat Monitor Service
+After=network.target
+
+[Service]
+ExecStart=/home/pi/projects/boat/boat-monitor/venv/bin/python /home/pi/projects/boat/boat-monitor/boat_app/boat_app_lite.py --main_app
+Restart=always
+User=pi
+
+[Install]
+WantedBy=default.target
