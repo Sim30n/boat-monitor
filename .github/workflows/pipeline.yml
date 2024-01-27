@@ -69,7 +69,7 @@ jobs:
 
         sudo systemctl enable boat_app_service
 
-        sudo systemctl start boat_app_service
+        sudo systemctl restart boat_app_service
       shell: bash
 
     #- name: Start boat_app_lite
