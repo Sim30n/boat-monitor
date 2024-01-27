@@ -155,7 +155,7 @@ if __name__ == "__main__":
         main_app()
 
     if args.get_value:
-        boat = ArduinoBoard(usb_ports[1])
+        boat = ArduinoBoard(usb_ports[0])
         boat.get_data(args.get_value)
         boat.close_serial()
 
