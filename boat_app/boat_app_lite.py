@@ -145,9 +145,9 @@ if __name__ == "__main__":
                     action="store_true")
     parser.add_argument("-g", "--get_value", help="Read individual node value.", type=str)
     args = parser.parse_args()
-
+    usb_ports = find_usb_ports()
     if args.read_values:
-        boat = ArduinoBoard()
+        boat = ArduinoBoard(usb_ports[0])
         boat.get_data()
         boat.close_serial()
 
@@ -155,7 +155,7 @@ if __name__ == "__main__":
         main_app()
 
     if args.get_value:
-        boat = ArduinoBoard()
+        boat = ArduinoBoard(usb_ports[1])
         boat.get_data(args.get_value)
         boat.close_serial()
 
