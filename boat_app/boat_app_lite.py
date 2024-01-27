@@ -82,7 +82,7 @@ class SeeeduinoBoard:
         self.ser.close()
 
 def find_usb_ports():
-    run_command = subprocess.Popen("arduino-cli board list", shell=True, stdout=subprocess.PIPE).stdout.read()
+    run_command = subprocess.Popen("/home/pi/arduino-cli/bin/arduino-cli board list", shell=True, stdout=subprocess.PIPE).stdout.read()
     for line in run_command.decode().splitlines():
         if "Arduino Micro" in line:
             arduino_micro = line[:12]
