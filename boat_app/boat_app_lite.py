@@ -131,11 +131,6 @@ def main_app():
             boat.close_serial()
             print("Closing serial")
             sys.exit(1)
-        if os.environ["STOP_SIGNAL"] == "1":
-            seeed_board.close_serial()
-            boat.close_serial()
-            print("Closing serial")
-            sys.exit(1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -70,9 +70,7 @@ jobs:
       shell: bash
     - name: Restart Boat app service
       run : > 
-        export LOG_FILE=${{ secrets.LOG_FILE }}
-
-        export STOP_SIGNAL="0"
+        echo "LOG_FILE=${{ secrets.LOG_FILE }}" > /home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor/boat_app/.env
 
         sudo cp /home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor/scripts/boat_app_service.service /etc/systemd/system/
 
