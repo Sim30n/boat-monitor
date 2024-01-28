@@ -48,7 +48,7 @@ jobs:
 
     - name: Run end user tests
       run : >
-        echo ${{ steps.commit.outputs.hash }}
+        echo ${{ github.sha }}
 
         export SERIAL=${{ secrets.SERIAL }}
 
