@@ -17,6 +17,7 @@ security
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <DHT.h>
+#include <sw_version.h>
 
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 0; // LCD screen variables

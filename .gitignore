@@ -6,3 +6,4 @@ app.log
 /arduino_sketch/build
 /seeeduino_sketch/build
 /tests/test_output
+__pycache__
