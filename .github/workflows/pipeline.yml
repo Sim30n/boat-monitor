@@ -47,7 +47,9 @@ jobs:
       shell: bash
 
     - name: Run end user tests
-      run : > 
+      run : >
+        echo ${{ steps.commit.outputs.hash }}
+
         export SERIAL=${{ secrets.SERIAL }}
 
         export SEEED_SERIAL=${{ secrets.SEEED_SERIAL }}
