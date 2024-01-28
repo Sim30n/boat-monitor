@@ -21,6 +21,11 @@ on:
         type: boolean
         description: Falsh the Boat-monitor application to Arduino Micro
 
+env:
+  PYTHON_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/python
+  ROBOT_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/robot
+
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "boat"
@@ -38,12 +43,12 @@ jobs:
     - name: Build and flash Boat-monitor application to Arduino Micro
       if: ${{ inputs.flash-arduino-micro }} 
       run : > 
-        /home/pi/projects/boat/boat-monitor/venv/bin/python
+        $PYTHON_EXECUTABLE
         /home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor/scripts/update_sw_version_file.py
         /home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor/arduino_sketch/sw_version.h
         ${{ github.sha }}
 
-        /home/pi/projects/boat/boat-monitor/venv/bin/robot
+        $ROBOT_EXECUTABLE
         --variablefile tests/variables.py
         --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
         --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
@@ -53,15 +58,9 @@ jobs:
 
     - name: Run end user tests
       run : >
-        export SERIAL=${{ secrets.SERIAL }}
-
-        export SEEED_SERIAL=${{ secrets.SEEED_SERIAL }}
-
         export LOG_FILE=${{ secrets.LOG_FILE }}
 
-        export STOP_SIGNAL="0"
-
-        /home/pi/projects/boat/boat-monitor/venv/bin/robot
+        $ROBOT_EXECUTABLE
         --variable commit_hash:${{ github.sha }}
         --variable boat_app_path:/home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor
         --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
