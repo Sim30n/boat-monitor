@@ -17,7 +17,7 @@ security
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <DHT.h>
-#include <sw_version.h>
+#include "sw_version.h"
 
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 0; // LCD screen variables
@@ -217,6 +217,12 @@ void loop() {
         {
             float humidity_temperature = get_humidity_temperature();
             Serial.print(humidity_temperature);
+            Serial.println();
+            delay(300);
+        }
+        else if(val == "get_sw_version")
+        {
+            Serial.print(sw_version);
             Serial.println();
             delay(300);
         }

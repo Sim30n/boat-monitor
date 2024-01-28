@@ -9,6 +9,15 @@ ${boat_app} =    ${boat_app_path}/boat_app/boat_app_lite.py
 
 # Run with command: robot --variable boat_app_path:/home/pi/projects/boat/boat-monitor --outputdir test_output end_user_tests.robot
 *** Test Cases ***
+Get SW Version
+    ${result} =    Run Process    ${python_bin}    ${boat_app}
+    ...    --get_value    get_sw_version
+    ${board_init} =    Get Line    ${result.stdout}    0
+    ${sw_version} =     Get Line    ${result.stdout}    -1
+    Should Be Equal    ${board_init}    Arduino initialized.
+    Log To Console    ${sw_version}
+    #Should Be True	${battery_voltage} >= 0
+
 Get Battery Voltage
     ${result} =    Run Process    ${python_bin}    ${boat_app}
     ...    --get_value    battery_voltage
