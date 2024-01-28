@@ -24,6 +24,7 @@ on:
 env:
   PYTHON_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/python
   ROBOT_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/robot
+  PYTHON_VENV_PATH: /home/pi/projects/boat/boat-monitor/venv/bin
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -51,7 +52,7 @@ jobs:
         $ROBOT_EXECUTABLE
         --variablefile tests/variables.py
         --variable boat_app_path:$GITHUB_WORKSPACE
-        --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
+        --variable venv_bin:$PYTHON_VENV_PATH
         --outputdir tests/test_output
         tests/build_arduino_tests.robot
       shell: bash
@@ -63,7 +64,7 @@ jobs:
         $ROBOT_EXECUTABLE
         --variable commit_hash:${{ github.sha }}
         --variable boat_app_path:$GITHUB_WORKSPACE
-        --variable venv_bin:/home/pi/projects/boat/boat-monitor/venv/bin
+        --variable venv_bin:$PYTHON_VENV_PATH
         --outputdir tests/test_output
         tests/end_user_tests.robot
       shell: bash
