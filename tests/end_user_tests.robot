@@ -15,8 +15,7 @@ Get SW Version
     ${board_init} =    Get Line    ${result.stdout}    0
     ${sw_version} =     Get Line    ${result.stdout}    -1
     Should Be Equal    ${board_init}    Arduino initialized.
-    Log To Console    ${sw_version}
-    #Should Be True	${battery_voltage} >= 0
+    Should Be True	"${sw_version}" == "${commit_hash}"
 
 Get Battery Voltage
     ${result} =    Run Process    ${python_bin}    ${boat_app}
