@@ -10,7 +10,7 @@ After=network.target
 
 [Service]
 ExecStartPre=/bin/sleep 10
-ExecStart=/home/pi/projects/boat/boat-monitor/venv/bin/python /home/pi/projects/boat/boat-monitor/boat_app/boat_app_lite.py --main_app
+ExecStart=/home/pi/projects/boat/boat-monitor/venv/bin/python /home/pi/projects/boat/actions-runner/_work/boat-monitor/boat-monitor/boat_app/boat_app_lite.py --main_app
 Restart=always
 User=pi
 
