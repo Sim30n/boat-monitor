@@ -19,7 +19,10 @@ on:
         type: string
       flash-arduino-micro:
         type: boolean
-        description: Falsh the Boat-monitor application to Arduino Micro
+        description: Flash the Boat-monitor application to Arduino Micro
+      flash-seeeduino-xiao:
+        type: boolean
+        description: Flash the Boat-monitor application (bilge monitor) to Seeeduino XIAO
 
 env:
   PYTHON_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/python
@@ -55,6 +58,22 @@ jobs:
         --variable venv_bin:$PYTHON_VENV_PATH
         --outputdir tests/test_output
         tests/build_arduino_tests.robot
+      shell: bash
+    
+    - name: Build and flash Boat-monitor application to Seeeduino XIAO
+      if: ${{ inputs.flash-seeeduino-xiao }} 
+      run : > 
+        $PYTHON_EXECUTABLE
+        $GITHUB_WORKSPACE/scripts/update_sw_version_file.py
+        $GITHUB_WORKSPACE/arduino_sketch/sw_version.h
+        ${{ github.sha }}
+
+        $ROBOT_EXECUTABLE
+        --variablefile tests/variables.py
+        --variable boat_app_path:$GITHUB_WORKSPACE
+        --variable venv_bin:$PYTHON_VENV_PATH
+        --outputdir tests/test_output
+        tests/build_seeeduino_tests.robot
       shell: bash
 
     - name: Run end user tests
