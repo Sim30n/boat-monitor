@@ -25,9 +25,9 @@ on:
         description: Flash the Boat-monitor application (bilge monitor) to Seeeduino XIAO
 
 env:
-  PYTHON_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/python
-  ROBOT_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/robot
-  PYTHON_VENV_PATH: /home/pi/projects/boat/boat-monitor/venv/bin
+  PYTHON_EXECUTABLE: /home/pi/projects/boat/boat-monitor/test_venv/bin/python
+  ROBOT_EXECUTABLE: /home/pi/projects/boat/boat-monitor/test_venv/bin/robot
+  PYTHON_VENV_PATH: /home/pi/projects/boat/boat-monitor/test_venv/bin
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
