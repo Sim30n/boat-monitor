@@ -1,0 +1,8 @@
+#1 set ip address
+#2 install git
+#3 make ssh key to git
+#4 set git username
+#5 install venv (python 3.9.2)
+#6 install arduino-cli
+#TODO 
+# setup arduino-cli
