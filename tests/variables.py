@@ -12,3 +12,4 @@ def find_usb_ports():
     return arduino_micro, seeeduino_xiao
 
 arduino_usb=find_usb_ports()[0]
+seeeduino_sub=find_usb_ports()[1]
