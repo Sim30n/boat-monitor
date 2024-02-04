@@ -18,4 +18,4 @@ Flash Arduino Board
     ${result} =    Run Process    arduino-cli    upload    -p     ${arduino_usb}
     ...    --fqbn    arduino:avr:micro    arduino_sketch    cwd=${flash_path}
     Should Be Equal As Integers    ${result.rc}    0
-    Sleep    2
+    Sleep    5
