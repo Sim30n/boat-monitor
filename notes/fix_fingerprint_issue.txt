@@ -1,0 +1,2 @@
+# after changing sd card on raspi, and resconnecting with ssh fix the fingerprint issue with:
+ssh-keygen -R <host>
