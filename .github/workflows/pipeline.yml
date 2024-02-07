@@ -99,7 +99,11 @@ jobs:
 
         sudo systemctl restart boat_app_service
       shell: bash
-
+    - name: Set crontab
+      run: >
+        echo "30 20 * * * PYTHON_EXECUTABLE $GITHUB_WORKSPACE\boat_app\log_analyzer.py" | crontab -
+      shell: bash
+      
     #- name: Start boat_app_lite
     #  #run: echo "Hello ${{ inputs.name }}"
     #  #run: ls
