@@ -103,7 +103,9 @@ jobs:
       run: >
         echo "45 20 * * * $PYTHON_EXECUTABLE $GITHUB_WORKSPACE/boat_app/log_analyzer.py" | crontab -
 
-        (crontab -l ; echo "env PATH='$PATH:/home/pi/arduino-cli/bin/' @reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
+        echo PATH="$PATH:/home/pi/arduino-cli/bin/"| crontab -
+
+        (crontab -l ; "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
 
       shell: bash
       
