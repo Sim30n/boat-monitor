@@ -5,6 +5,7 @@
 #5 install venv (python 3.9.2)
 #6 install arduino-cli
 #7 setup arduino-cli
+#8 install tmux
 #TODO 
 # set remote
 
