@@ -101,12 +101,11 @@ jobs:
       shell: bash
     - name: Set crontab
       run: >
-        echo "45 20 * * * $PYTHON_EXECUTABLE $GITHUB_WORKSPACE/boat_app/log_analyzer.py" | crontab -
-
         echo PATH="$PATH:/home/pi/arduino-cli/bin/" | crontab -
 
-        (crontab -l ; "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
+        (crontab -l ; echo "45 20 * * * $PYTHON_EXECUTABLE $GITHUB_WORKSPACE/boat_app/log_analyzer.py") | crontab -
 
+        (crontab -l ; echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
       shell: bash
       
     #- name: Start boat_app_lite
