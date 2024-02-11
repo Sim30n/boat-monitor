@@ -23,11 +23,15 @@ on:
       flash-seeeduino-xiao:
         type: boolean
         description: Flash the Boat-monitor application (bilge monitor) to Seeeduino XIAO
+      install-python-packages:
+        type: boolean
+        description: Install Python packages
 
 env:
-  PYTHON_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/python
-  ROBOT_EXECUTABLE: /home/pi/projects/boat/boat-monitor/venv/bin/robot
-  PYTHON_VENV_PATH: /home/pi/projects/boat/boat-monitor/venv/bin
+  PYTHON_EXECUTABLE: /home/pi/projects/boat/venv/bin/python
+  ROBOT_EXECUTABLE: /home/pi/projects/boat/venv/bin/robot
+  PYTHON_VENV_PATH: /home/pi/projects/boat/venv/bin
+  BOAT_APP_SERVICE: /home/pi/projects/boat/boat-monitor
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -43,6 +47,14 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v3
+    
+    - name: Set environmental variable and install python packages
+      if: ${{ inputs.install-python-packages }} 
+      run : > 
+        python3 -m venv /home/pi/projects/boat/venv
+
+        /home/pi/projects/boat/venv/bin/pip install -r $GITHUB_WORKSPACE/boat_app/requirements.txt
+      shell: bash
     
     - name: Build and flash Boat-monitor application to Arduino Micro
       if: ${{ inputs.flash-arduino-micro }} 
@@ -89,7 +101,9 @@ jobs:
       shell: bash
     - name: Restart Boat app service
       run : > 
-        echo "LOG_FILE=${{ secrets.LOG_FILE }}" > $GITHUB_WORKSPACE/boat_app/.env
+        cp -r $GITHUB_WORKSPACE /home/pi/projects/boat
+
+        echo "LOG_FILE=${{ secrets.LOG_FILE }}" > $BOAT_APP_SERVICE/boat_app/.env
 
         sudo cp $GITHUB_WORKSPACE/scripts/boat_app_service.service /etc/systemd/system/
 
@@ -103,7 +117,7 @@ jobs:
       run: >
         echo PATH="$PATH:/home/pi/arduino-cli/bin/" | crontab -
 
-        (crontab -l ; echo "45 20 * * * $PYTHON_EXECUTABLE $GITHUB_WORKSPACE/boat_app/log_analyzer.py") | crontab -
+        (crontab -l ; echo "45 20 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py") | crontab -
 
         (crontab -l ; echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
       shell: bash
