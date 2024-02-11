@@ -101,6 +101,8 @@ jobs:
       shell: bash
     - name: Restart Boat app service
       run : > 
+        chmod -R +rwx $BOAT_APP_SERVICE/boat_app
+        
         cp -r $GITHUB_WORKSPACE /home/pi/projects/boat
 
         echo "LOG_FILE=${{ secrets.LOG_FILE }}" > $BOAT_APP_SERVICE/boat_app/.env
