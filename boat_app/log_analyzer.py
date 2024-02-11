@@ -30,10 +30,11 @@ log_items = []
 for line in lines:
     if line.startswith("telegram"):
         continue
-    dictitem = line.split("{")
-    dict_string = "{"+f"{dictitem[1]}"
-    to_dict = eval(dict_string)
-    log_items.append(to_dict)
+    elif line.startswith("root - INFO"):
+        dictitem = line.split("{")
+        dict_string = "{"+f"{dictitem[1]}"
+        to_dict = eval(dict_string)
+        log_items.append(to_dict)
 
 # --------------- pandas stuff ------------------------
 df = pd.DataFrame(log_items)
