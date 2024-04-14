@@ -115,8 +115,10 @@ jobs:
       shell: bash
     - name: Set crontab
       run: >
-        echo PATH="$PATH:/home/pi/arduino-cli/bin/" | crontab -
-
+        if ! command -v arduino-cli &> /dev/null; then
+            echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"' | crontab -
+        fi
+        
         (crontab -l ; echo "40 14 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py") | crontab -
 
         (crontab -l ; echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
