@@ -48,9 +48,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Stop Boat Monitor Service
+    - name: Stop Boat Monitor Service And Add arduico-cli into path
       run : >
         sudo systemctl stop boat_app_service
+
+        if ! command -v arduino-cli &> /dev/null; then
+            export PATH="/home/pi/arduino-cli/bin/:$PATH"
+        fi
       shell: bash
 
     - name: Set environmental variable and install python packages
