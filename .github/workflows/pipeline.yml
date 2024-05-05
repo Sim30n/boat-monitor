@@ -47,7 +47,12 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v3
-    
+
+    - name: Stop Boat Monitor Service
+      run : >
+        sudo systemctl stop boat_app_service
+      shell: bash
+
     - name: Set environmental variable and install python packages
       if: ${{ inputs.install-python-packages }} 
       run : > 
@@ -115,6 +120,8 @@ jobs:
       shell: bash
     - name: Set crontab
       run: >
+        crontab -r
+
         if ! command -v arduino-cli &> /dev/null; then
             echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"' | crontab -
         fi
