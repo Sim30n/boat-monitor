@@ -125,7 +125,7 @@ jobs:
         crontab -l | { cat; echo "# Crontab for boat app"; } | crontab -
 
         if ! command -v arduino-cli &> /dev/null; then
-            echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"' | crontab -
+            (crontab -l ; echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"') | crontab -
         fi
         
         (crontab -l ; echo "40 14 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py") | crontab -
