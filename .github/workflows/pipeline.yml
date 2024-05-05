@@ -120,8 +120,6 @@ jobs:
       shell: bash
     - name: Set crontab
       run: >
-        crontab -r
-
         echo "# Crontab for boat app" > crontab_file.txt
 
         echo "40 14 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py >> crontab_file.txt
