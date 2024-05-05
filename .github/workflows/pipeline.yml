@@ -120,6 +120,10 @@ jobs:
       shell: bash
     - name: Set crontab
       run: >
+        crontab -r
+        
+        crontab -l | { cat; echo "# Crontab for boat app"; } | crontab -
+
         if ! command -v arduino-cli &> /dev/null; then
             echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"' | crontab -
         fi
