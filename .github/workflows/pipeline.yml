@@ -48,7 +48,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Stop Boat Monitor Service And Add arduico-cli into path
+    - name: Stop Boat Monitor Service
       run : >
         sudo systemctl stop boat_app_service
       shell: bash
