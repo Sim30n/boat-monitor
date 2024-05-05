@@ -120,8 +120,6 @@ jobs:
       shell: bash
     - name: Set crontab
       run: >
-        crontab -r 2>/dev/null
-
         if ! command -v arduino-cli &> /dev/null; then
             echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"' | crontab -
         fi
