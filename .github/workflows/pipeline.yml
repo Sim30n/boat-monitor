@@ -51,10 +51,6 @@ jobs:
     - name: Stop Boat Monitor Service And Add arduico-cli into path
       run : >
         sudo systemctl stop boat_app_service
-
-        if ! command -v arduino-cli &> /dev/null; then
-            export PATH="/home/pi/arduino-cli/bin/:$PATH"
-        fi
       shell: bash
 
     - name: Set environmental variable and install python packages
@@ -68,6 +64,10 @@ jobs:
     - name: Build and flash Boat-monitor application to Arduino Micro
       if: ${{ inputs.flash-arduino-micro }} 
       run : > 
+        if ! command -v arduino-cli &> /dev/null; then
+            export PATH="/home/pi/arduino-cli/bin/:$PATH"
+        fi
+        
         $PYTHON_EXECUTABLE
         $GITHUB_WORKSPACE/scripts/update_sw_version_file.py
         $GITHUB_WORKSPACE/arduino_sketch/sw_version.h
@@ -84,6 +84,10 @@ jobs:
     - name: Build and flash Boat-monitor application to Seeeduino XIAO
       if: ${{ inputs.flash-seeeduino-xiao }} 
       run : > 
+        if ! command -v arduino-cli &> /dev/null; then
+            export PATH="/home/pi/arduino-cli/bin/:$PATH"
+        fi
+        
         $PYTHON_EXECUTABLE
         $GITHUB_WORKSPACE/scripts/update_sw_version_file.py
         $GITHUB_WORKSPACE/arduino_sketch/sw_version.h
