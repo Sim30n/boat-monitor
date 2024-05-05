@@ -130,7 +130,7 @@ jobs:
       run: >
         echo "# Crontab for boat app" > crontab_file.txt
 
-        echo "40 16 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py" >> crontab_file.txt
+        echo "50 16 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py" >> crontab_file.txt
 
         echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh" >> crontab_file.txt
 
