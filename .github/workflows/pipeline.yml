@@ -121,16 +121,14 @@ jobs:
     - name: Set crontab
       run: >
         crontab -r
-        
-        crontab -l | { cat; echo "# Crontab for boat app"; } | crontab -
 
-        if ! command -v arduino-cli &> /dev/null; then
-            (crontab -l ; echo 'PATH="$PATH:/home/pi/arduino-cli/bin/"') | crontab -
-        fi
-        
-        (crontab -l ; echo "40 14 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py") | crontab -
+        echo "# Crontab for boat app" > crontab_file.txt
 
-        (crontab -l ; echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh") | crontab -
+        echo "40 14 * * * $PYTHON_EXECUTABLE $BOAT_APP_SERVICE/boat_app/log_analyzer.py >> crontab_file.txt
+
+        echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh >> crontab_file.txt
+
+        crontab crontab_file.txt
       shell: bash
       
     #- name: Start boat_app_lite
