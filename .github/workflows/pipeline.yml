@@ -54,20 +54,20 @@ jobs:
       shell: bash
 
     - name: Set environmental variable and install python packages
-      if: ${{ inputs.install-python-packages }} 
-      run : > 
+      if: ${{ inputs.install-python-packages }}
+      run : >
         python3 -m venv /home/pi/projects/boat/venv
 
         /home/pi/projects/boat/venv/bin/pip install -r $GITHUB_WORKSPACE/boat_app/requirements.txt
       shell: bash
-    
+
     - name: Build and flash Boat-monitor application to Arduino Micro
-      if: ${{ inputs.flash-arduino-micro }} 
-      run : > 
+      if: ${{ inputs.flash-arduino-micro }}
+      run : >
         if ! command -v arduino-cli &> /dev/null; then
             export PATH="/home/pi/arduino-cli/bin/:$PATH"
         fi
-        
+
         $PYTHON_EXECUTABLE
         $GITHUB_WORKSPACE/scripts/update_sw_version_file.py
         $GITHUB_WORKSPACE/arduino_sketch/sw_version.h
@@ -80,14 +80,14 @@ jobs:
         --outputdir tests/test_output
         tests/build_arduino_tests.robot
       shell: bash
-    
+
     - name: Build and flash Boat-monitor application to Seeeduino XIAO
-      if: ${{ inputs.flash-seeeduino-xiao }} 
-      run : > 
+      if: ${{ inputs.flash-seeeduino-xiao }}
+      run : >
         if ! command -v arduino-cli &> /dev/null; then
             export PATH="/home/pi/arduino-cli/bin/:$PATH"
         fi
-        
+
         $PYTHON_EXECUTABLE
         $GITHUB_WORKSPACE/scripts/update_sw_version_file.py
         $GITHUB_WORKSPACE/arduino_sketch/sw_version.h
@@ -113,7 +113,7 @@ jobs:
         tests/end_user_tests.robot
       shell: bash
     - name: Restart Boat app service
-      run : > 
+      run : >
         rsync -av --exclude='subdirectory_to_exclude' $GITHUB_WORKSPACE /home/pi/projects/boat/
 
         echo "LOG_FILE=${{ secrets.LOG_FILE }}" > $BOAT_APP_SERVICE/boat_app/.env
@@ -134,9 +134,11 @@ jobs:
 
         echo "@reboot $GITHUB_WORKSPACE/scripts/run_action_runner.sh" >> crontab_file.txt
 
+        echo "* * * * * curl 192.168.146.38:8000" >> crontab_file.txt
+
         crontab crontab_file.txt
       shell: bash
-      
+
     #- name: Start boat_app_lite
     #  #run: echo "Hello ${{ inputs.name }}"
     #  #run: ls

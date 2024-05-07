@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from datetime import datetime
 import threading
 import time
+import telegram_send
 
 # Global variable to track the last request time
 last_request_time = None
@@ -31,6 +32,7 @@ def check_request_interval(interval):
     global last_request_time
     while True:
         if last_request_time is not None and time.time() - last_request_time > interval:
+            telegram_send.send(messages=["Boat monintor app *stopped*"], parse_mode="markdown")
             print("No requests received within the specified interval")
         time.sleep(interval)
 
